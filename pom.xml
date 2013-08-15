@@ -4,7 +4,7 @@
     
     <groupId>com.elibom</groupId>
     <artifactId>elibom-java</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>Elibom REST API Client</name>
     
     <dependencies>
@@ -18,12 +18,6 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>6.1.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jogger</groupId>
-            <artifactId>jogger-core</artifactId>
-            <version>0.8.7</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -94,11 +88,4 @@
             </plugin>
         </plugins>
     </build>
-    
-    <repositories>
-        <repository>  
-            <id>elibom</id>  
-            <url>http://repository.elibom.net/nexus/content/repositories/releases</url>  
-        </repository>
-    </repositories>
 </project>

@@ -7,6 +7,19 @@
     <version>1.0.0-SNAPSHOT</version>
     <name>Elibom REST API Client</name>
     
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
+    <scm>
+        <url>scm:git:git@github.com:elibom/elibom-java.git</url>
+        <connection>scm:git:git@github.com:elibom/elibom-java.git</connection>
+    </scm>
+    
     <dependencies>
         <dependency>
             <groupId>org.json</groupId>

@@ -14,7 +14,7 @@ Add the dependency to your projects pom.xml file:
 <dependency>
   <groupId>com.elibom</groupId>
   <artifactId>elibom-java</artifactId>
-  <version>1.0.0</version>
+  <version>0.1.0</version>
 </dependency>
 ```
 

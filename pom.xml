@@ -26,7 +26,7 @@
     <scm>
         <connection>scm:git:git@github.com:elibom/elibom-java.git</connection>
         <developerConnection>scm:git:git@github.com:elibom/elibom-java.git</developerConnection>
-        <url>git@github.com:elibom/elibom-java.git</url>
+        <url>scm:git:git@github.com:elibom/elibom-java.git</url>
     </scm>
     
     <developers>

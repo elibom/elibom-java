@@ -24,7 +24,7 @@ import sun.misc.BASE64Encoder;
 /**
  * The <a href="http://www.elibom.com/">elibom.com</a> REST API client.
  *
- * @author Germán Escobar
+ * @author Germ√°n Escobar
  */
 @SuppressWarnings("restriction")
 public class ElibomRestClient {

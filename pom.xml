@@ -1,11 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
     
     <groupId>com.elibom</groupId>
     <artifactId>elibom-java</artifactId>
+    <packaging>jar</packaging>
     <version>0.1.0-SNAPSHOT</version>
     <name>Elibom REST API Client</name>
+    <description>A java client for Elibom REST API</description>
+    <url>http://www.elibom.com</url>
     
     <licenses>
         <license>
@@ -16,9 +24,18 @@
     </licenses>
     
     <scm>
-        <url>scm:git:git@github.com:elibom/elibom-java.git</url>
         <connection>scm:git:git@github.com:elibom/elibom-java.git</connection>
+        <developerConnection>scm:git:git@github.com:elibom/elibom-java.git</developerConnection>
+        <url>git@github.com:elibom/elibom-java.git</url>
     </scm>
+    
+    <developers>
+        <developer>
+            <id>german.escobar</id>
+            <name>Germán Escobar</name>
+            <email>german.escobar@elibom.com</email>
+        </developer>
+    </developers>
     
     <dependencies>
         <dependency>
@@ -99,6 +116,30 @@
                     <tagNameFormat>@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
+           
         </plugins>
     </build>
+    
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 /**
  *
- * @author Germán Escobar
+ * @author Germ√°n Escobar
  */
 public class Account {
 

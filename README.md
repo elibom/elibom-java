@@ -23,6 +23,7 @@ Or download the JAR and include it in your project.
 2\. Create an `ElibomRestClient` object passing your credentials:
 
 ```java
+System.setProperty("jsse.enableSNIExtension", "false"); // if you are using Java 7
 ElibomRestClient elibom = new ElibomRestClient("your_email", "your_api_password");
 ```
 

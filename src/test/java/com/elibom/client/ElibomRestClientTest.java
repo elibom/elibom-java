@@ -58,7 +58,7 @@ public class ElibomRestClientTest {
         stubFor(post(urlEqualTo("/messages"))
                 .willReturn(aResponse()
                     .withStatus(200)
-                    .withHeader("Content-Type", "application/json")
+                    .withHeader("Content-Type", "application/json; charset=UTF-8")
                     .withBody("{ \"deliveryToken\": \"12345\" }")));
 
         ElibomRestClient elibom = new ElibomRestClient("t@u.com", "test", "http://localhost:4005");
@@ -67,7 +67,7 @@ public class ElibomRestClientTest {
 
         verify(postRequestedFor(urlEqualTo("/messages"))
                 .withHeader("Accept", equalTo("application/json"))
-                .withHeader("Content-Type", equalTo("application/json"))
+                .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
                 .withRequestBody(equalTo("{\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\"}")));
     }
 
@@ -103,7 +103,7 @@ public class ElibomRestClientTest {
         stubFor(post(urlEqualTo("/messages"))
                 .willReturn(aResponse()
                     .withStatus(200)
-                    .withHeader("Content-Type", "application/json")
+                    .withHeader("Content-Type", "application/json; charset=UTF-8")
                     .withBody("{ \"scheduleId\": \"32\" }")));
 
         Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2014-02-18 10:00");
@@ -114,7 +114,7 @@ public class ElibomRestClientTest {
 
         verify(postRequestedFor(urlEqualTo("/messages"))
                 .withHeader("Accept", equalTo("application/json"))
-                .withHeader("Content-Type", equalTo("application/json"))
+                .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
                 .withRequestBody(equalTo("{\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\",\"scheduleDate\":\"2014-02-18 10:00\"}")));
     }
 
@@ -168,7 +168,7 @@ public class ElibomRestClientTest {
         stubFor(get(urlEqualTo("/messages/12345"))
                 .willReturn(aResponse()
                     .withStatus(200)
-                    .withHeader("Content-Type", "application/json")
+                    .withHeader("Content-Type", "application/json; charset=UTF-8")
                     .withBody(jsonDelivery.toString())));
 
         ElibomRestClient elibom = new ElibomRestClient("t@u.com", "test", "http://localhost:4005");
@@ -226,7 +226,7 @@ public class ElibomRestClientTest {
         stubFor(get(urlEqualTo("/schedules/scheduled"))
                 .willReturn(aResponse()
                     .withStatus(200)
-                    .withHeader("Content-Type", "application/json")
+                    .withHeader("Content-Type", "application/json; charset=UTF-8")
                     .withBody(jsonSchedules.toString())));
 
         ElibomRestClient elibom = new ElibomRestClient("t@u.com", "test", "http://localhost:4005");
@@ -264,7 +264,7 @@ public class ElibomRestClientTest {
         stubFor(get(urlEqualTo("/schedules/32"))
                 .willReturn(aResponse()
                     .withStatus(200)
-                    .withHeader("Content-Type", "application/json")
+                    .withHeader("Content-Type", "application/json; charset=UTF-8")
                     .withBody(jsonSchedule.toString())));
 
         ElibomRestClient elibom = new ElibomRestClient("t@u.com", "test", "http://localhost:4005");
@@ -319,7 +319,7 @@ public class ElibomRestClientTest {
         stubFor(get(urlEqualTo("/users"))
                 .willReturn(aResponse()
                     .withStatus(200)
-                    .withHeader("Content-Type", "application/json")
+                    .withHeader("Content-Type", "application/json; charset=UTF-8")
                     .withBody(jsonUsers.toString())));
 
         ElibomRestClient elibom = new ElibomRestClient("t@u.com", "test", "http://localhost:4005");
@@ -345,7 +345,7 @@ public class ElibomRestClientTest {
         stubFor(get(urlEqualTo("/users/1"))
                 .willReturn(aResponse()
                     .withStatus(200)
-                    .withHeader("Content-Type", "application/json")
+                    .withHeader("Content-Type", "application/json; charset=UTF-8")
                     .withBody(jsonUser.toString())));
 
         ElibomRestClient elibom = new ElibomRestClient("t@u.com", "test", "http://localhost:4005");
@@ -366,7 +366,7 @@ public class ElibomRestClientTest {
         stubFor(get(urlEqualTo("/account"))
                 .willReturn(aResponse()
                     .withStatus(200)
-                    .withHeader("Content-Type", "application/json")
+                    .withHeader("Content-Type", "application/json; charset=UTF-8")
                     .withBody(jsonAccount.toString())));
 
         ElibomRestClient elibom = new ElibomRestClient("t@u.com", "test", "http://localhost:4005");

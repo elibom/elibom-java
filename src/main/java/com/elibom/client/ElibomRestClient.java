@@ -292,13 +292,13 @@ public class ElibomRestClient {
         try {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("Authorization", buildAuthorizationHeader());
-            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestProperty("X-API-Source", LIB_VERSION);
 
             connection.setDoOutput(true);
-            out = new OutputStreamWriter(connection.getOutputStream());
-            out.write(json.toString());
+            out = new OutputStreamWriter(connection.getOutputStream(), "UTF-8");
+            json.write(out);
             out.flush();
 
             int statusCode = connection.getResponseCode();

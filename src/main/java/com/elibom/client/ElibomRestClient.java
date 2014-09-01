@@ -31,6 +31,8 @@ public class ElibomRestClient {
 
     private static final String DEFAULT_HOST = "https://www.elibom.com";
 
+    private final String LIB_VERSION = "java-0.2.1";
+
     private String host;
 
     private String username;
@@ -292,6 +294,7 @@ public class ElibomRestClient {
             connection.setRequestProperty("Authorization", buildAuthorizationHeader());
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("X-API-Source", LIB_VERSION);
 
             connection.setDoOutput(true);
             out = new OutputStreamWriter(connection.getOutputStream());
@@ -317,6 +320,7 @@ public class ElibomRestClient {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("Authorization", buildAuthorizationHeader());
             connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("X-API-Source", LIB_VERSION);
 
             int statusCode = connection.getResponseCode();
             if (statusCode != 200) {
@@ -339,6 +343,7 @@ public class ElibomRestClient {
 
             connection.setRequestProperty("Authorization", buildAuthorizationHeader());
             connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("X-API-Source", LIB_VERSION);
             connection.connect();
 
             int statusCode = connection.getResponseCode();

@@ -19,6 +19,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.github.tomakehurst.wiremock.common.Json;
+
 import sun.misc.BASE64Encoder;
 
 /**
@@ -128,6 +130,41 @@ public class ElibomRestClient {
         }
     }
 
+    
+    /**
+     * Query the last <code>numMessages</code> messages sent from your account
+     * 
+     * @param numMessages number of messages that will be consulted
+     * 
+     * @return a List of Message objects or an empty List if no messages is found
+     * @throws HttpServerException if the server responds with a HTTP status code other than <code>200 OK</code>.
+     * @throws RuntimeException wraps any other unexpected exception.
+     */
+    public List<Message> getLastMessages(int numMessages) throws HttpServerException, RuntimeException {
+    	Preconditions.isInteger(numMessages, "numMessages must be greater than zero");
+    	
+    	try {
+    		HttpURLConnection connection = get("/messages?perPage="+numMessages);
+    		JSONObject json = getJsonObject(connection.getInputStream());
+        	List<Message> messages = new ArrayList<Message>();
+            JSONArray jm = json.getJSONArray("messages");
+            for (int i=0; i < jm.length(); i++) {
+                messages.add(new Message(jm.getJSONObject(i)));
+            }
+    		
+    		return messages;
+    		
+		} catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    
+    
     /**
      * Query the delivery with the specified <code>deliveryId</code>.
      *

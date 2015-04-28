@@ -72,4 +72,10 @@ public class Preconditions {
             throw new IllegalArgumentException("A precondition failed: " + message);
         }
     }
+    
+    public static void isInteger(int value, String message) throws IllegalArgumentException {
+    	if(value < 1) {
+    		throw new IllegalArgumentException("A precondition failed: " + message);
+    	}
+    }
 }

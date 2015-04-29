@@ -19,8 +19,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.github.tomakehurst.wiremock.common.Json;
-
 import sun.misc.BASE64Encoder;
 
 /**

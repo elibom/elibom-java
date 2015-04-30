@@ -144,27 +144,7 @@ public class ElibomRestClientTest {
 
     @Test
     public void shouldShowDelivery() throws Exception {
-        JSONObject jsonMessage = new JSONObject()
-                .put("id", 171851)
-                .put("user", new JSONObject()
-                        .put("id", 2)
-                        .put("url", "https://www.elibom.com:9090/users/2"))
-                .put("to", "573002175604")
-                .put("operator", "Tigo (Colombia)")
-                .put("text", "this is a test")
-                .put("status", "sent")
-                .put("statusDetail", "sent")
-                .put("credits", 1)
-                .put("from", "3542")
-                .put("createdAt", "2013-07-24 15:05:34")
-                .put("sentAt", "2013-07-24 15:05:34");
-        JSONArray jsonMessages = new JSONArray().put(jsonMessage);
-        JSONObject jsonDelivery = new JSONObject()
-                .put("deliveryId", "12345")
-                .put("numSent", 1)
-                .put("numFailed", 0)
-                .put("messages", jsonMessages);
-
+        JSONObject jsonDelivery = createFakeDelivery();
         stubFor(get(urlEqualTo("/messages/12345"))
                 .willReturn(aResponse()
                     .withStatus(200)
@@ -212,15 +192,7 @@ public class ElibomRestClientTest {
 
     @Test
     public void shouldListScheduledMessages() throws Exception {
-        JSONObject jsonSchedule = new JSONObject()
-                .put("id", 32)
-                .put("user", new JSONObject().put("id", 45).put("url", "https://www.elibom.com/users/45"))
-                .put("scheduledTime", "2014-05-23 10:23:00")
-                .put("creationTime", "2012-09-23 22:00:00")
-                .put("isFile", true)
-                .put("fileName", "test.xls")
-                .put("fileHasText", false)
-                .put("text", "this is a test");
+        JSONObject jsonSchedule = createFakeScheduler();
         JSONArray jsonSchedules = new JSONArray().put(jsonSchedule);
 
         stubFor(get(urlEqualTo("/schedules/scheduled"))
@@ -250,16 +222,7 @@ public class ElibomRestClientTest {
 
     @Test
     public void shouldShowScheduledMessage() throws Exception {
-        JSONObject jsonSchedule = new JSONObject()
-                .put("id", 32)
-                .put("user", new JSONObject().put("id", 45).put("url", "https://www.elibom.com/users/45"))
-                .put("scheduledTime", "2014-05-23 10:23:00")
-                .put("creationTime", "2012-09-23 22:00:00")
-                .put("status", "scheduled")
-                .put("isFile", true)
-                .put("fileName", "test.xls")
-                .put("fileHasText", false)
-                .put("text", "this is a test");
+        JSONObject jsonSchedule = createFakeScheduler();
 
         stubFor(get(urlEqualTo("/schedules/32"))
                 .willReturn(aResponse()
@@ -309,11 +272,7 @@ public class ElibomRestClientTest {
 
     @Test
     public void shouldListUsers() throws Exception {
-        JSONObject jsonUser = new JSONObject()
-                .put("id", 1)
-                .put("name", "Usuario 1")
-                .put("email", "usuario1@tudominio.com")
-                .put("status", "active");
+        JSONObject jsonUser = createFakeUser();
         JSONArray jsonUsers = new JSONArray().put(jsonUser);
 
         stubFor(get(urlEqualTo("/users"))
@@ -336,11 +295,7 @@ public class ElibomRestClientTest {
 
     @Test
     public void shouldShowUser() throws Exception {
-        JSONObject jsonUser = new JSONObject()
-                .put("id", 1)
-                .put("name", "Usuario 1")
-                .put("email", "usuario1@tudominio.com")
-                .put("status", "active");
+        JSONObject jsonUser = createFakeUser();
 
         stubFor(get(urlEqualTo("/users/1"))
                 .willReturn(aResponse()
@@ -379,26 +334,12 @@ public class ElibomRestClientTest {
     
     @Test
     public void shouldShowLastMessages() throws Exception {
-        JSONObject jsonMessage = new JSONObject()
-                .put("id", 171851)
-                .put("user", new JSONObject()
-                        .put("id", 2)
-                        .put("url", "https://www.elibom.com:9090/users/2"))
-                .put("to", "573002175604")
-                .put("operator", "Tigo (Colombia)")
-                .put("text", "this is a test")
-                .put("status", "sent")
-                .put("statusDetail", "sent")
-                .put("credits", 1)
-                .put("from", "3542")
-                .put("createdAt", "2013-07-24 15:05:34")
-                .put("sentAt", "2013-07-24 15:05:34");
-        JSONArray jsonMessages = new JSONArray().put(jsonMessage);
+        JSONArray jsonMessages = createFakeMessagesList();
 
         JSONObject jsonLastMessages = new JSONObject()
         .put("messages", jsonMessages);
         
-        stubFor(get(urlEqualTo("/messages?perPage=1"))
+        stubFor(get(urlEqualTo("/messages?perPage=1&user=t@u.com"))
                 .willReturn(aResponse()
                     .withStatus(200)
                     .withHeader("Content-Type", "application/json; charset=UTF-8")
@@ -428,6 +369,66 @@ public class ElibomRestClientTest {
         ElibomRestClient elibom = new ElibomRestClient("t@u.com", "test", "http://localhost:4005");
         elibom.getLastMessages(-1);
     }
+    
+    private JSONObject createFakeMessage() throws Exception
+    {
+        JSONObject jsonMessage = new JSONObject()
+        .put("id", 171851)
+        .put("user", new JSONObject()
+                .put("id", 2)
+                .put("url", "https://www.elibom.com:9090/users/2"))
+        .put("to", "573002175604")
+        .put("operator", "Tigo (Colombia)")
+        .put("text", "this is a test")
+        .put("status", "sent")
+        .put("statusDetail", "sent")
+        .put("credits", 1)
+        .put("from", "3542")
+        .put("createdAt", "2013-07-24 15:05:34")
+        .put("sentAt", "2013-07-24 15:05:34");
+        
+        return jsonMessage;
+    }
+    
+    private JSONArray createFakeMessagesList() throws Exception {
+        JSONObject jsonMessage = createFakeMessage();
+        JSONArray jsonMessages = new JSONArray().put(jsonMessage);
+        return jsonMessages;
+    }
 
+    private JSONObject createFakeDelivery() throws Exception {
+        JSONArray jsonMessages = createFakeMessagesList();
+        JSONObject jsonDelivery = new JSONObject()
+        .put("deliveryId", "12345")
+        .put("numSent", 1)
+        .put("numFailed", 0)
+        .put("messages", jsonMessages);
+
+        return jsonDelivery;
+    }
+    
+    private JSONObject createFakeScheduler() throws Exception{
+        JSONObject jsonSchedule = new JSONObject()
+        .put("id", 32)
+        .put("user", new JSONObject().put("id", 45).put("url", "https://www.elibom.com/users/45"))
+        .put("scheduledTime", "2014-05-23 10:23:00")
+        .put("creationTime", "2012-09-23 22:00:00")
+        .put("isFile", true)
+        .put("fileName", "test.xls")
+        .put("fileHasText", false)
+        .put("text", "this is a test");
+        
+        return jsonSchedule;
+    }
+    
+    private JSONObject createFakeUser() throws Exception{
+        JSONObject jsonUser = new JSONObject()
+        .put("id", 1)
+        .put("name", "Usuario 1")
+        .put("email", "usuario1@tudominio.com")
+        .put("status", "active");
+
+        return jsonUser;
+    }
 
 }

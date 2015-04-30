@@ -128,9 +128,8 @@ public class ElibomRestClient {
         }
     }
 
-    
     /**
-     * Query the last <code>numMessages</code> messages sent from your account
+     * Query the last <code>numMessages</code> messages sent from an user
      * 
      * @param numMessages number of messages that will be consulted
      * 
@@ -142,25 +141,22 @@ public class ElibomRestClient {
     	Preconditions.isInteger(numMessages, "numMessages must be greater than zero");
     	
     	try {
-    		HttpURLConnection connection = get("/messages?perPage="+numMessages);
-    		JSONObject json = getJsonObject(connection.getInputStream());
-        	List<Message> messages = new ArrayList<Message>();
-            JSONArray jm = json.getJSONArray("messages");
-            for (int i=0; i < jm.length(); i++) {
-                messages.add(new Message(jm.getJSONObject(i)));
-            }
+    		HttpURLConnection connection = get("/messages?perPage="+numMessages+"&user="+this.username);
+    		JSONObject json = getJsonObject(connection.getInputStream());List<Message> messages = new ArrayList<Message>();
+    		JSONArray jm = json.getJSONArray("messages");
+    		for (int i=0; i < jm.length(); i++) {
+    			messages.add(new Message(jm.getJSONObject(i)));
+    		}
     		
     		return messages;
-    		
-		} catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (JSONException e) {
+    	} catch (IOException e) {
+    		throw new RuntimeException(e);
+    	} catch (JSONException e) {
             throw new RuntimeException(e);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
     }
-    
     
     
     /**

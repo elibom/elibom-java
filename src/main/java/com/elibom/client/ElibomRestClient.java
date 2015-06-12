@@ -319,7 +319,7 @@ public class ElibomRestClient {
     
     
     public JSONObject createUser( long idAccount, String name, String email,
-            String password, long country, String timeZone) throws HttpServerException, RuntimeException {
+            String password) throws HttpServerException, RuntimeException {
         
         Preconditions.notEmpty(name, "no name provided");
         Preconditions.notEmpty(email, "no email provided");
@@ -331,8 +331,8 @@ public class ElibomRestClient {
                 put("email", email).
                 put("password",password).
                 put("name",name).
-                put("countryCode",country).
-                put("timeZone",timeZone );
+                put("countryCode",57).
+                put("timeZone","GMT-05:00" );
             
             HttpURLConnection connection = post("/admin/users", json);
             return getJsonObject(connection.getInputStream());

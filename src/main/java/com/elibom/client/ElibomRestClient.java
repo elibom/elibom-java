@@ -30,7 +30,7 @@ import sun.misc.BASE64Encoder;
 public class ElibomRestClient {
 
     private static final String DEFAULT_HOST = "https://www.elibom.com";
-
+    
     private final String LIB_VERSION = "java-0.2.1";
 
     private String host;
@@ -316,6 +316,33 @@ public class ElibomRestClient {
         }
     }
 
+    
+    
+    public JSONObject createUser( long idAccount, String name, String email,
+            String password, long country, String timeZone) throws HttpServerException, RuntimeException {
+        
+        Preconditions.notEmpty(name, "no name provided");
+        Preconditions.notEmpty(email, "no email provided");
+        Preconditions.notEmpty(password, "no password provided");
+
+        try {
+            JSONObject json = new JSONObject().
+                put("accountId", idAccount).
+                put("email", email).
+                put("password",password).
+                put("name",name).
+                put("countryCode",country).
+                put("timeZone",timeZone );
+            
+            HttpURLConnection connection = post("/admin/users", json);
+            return getJsonObject(connection.getInputStream());
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
     private HttpURLConnection post(String resource, JSONObject json) throws JSONException, IOException {
         URL url = buildUrl(resource);
 
@@ -452,4 +479,5 @@ public class ElibomRestClient {
         }
     }
 
+    
 }

@@ -241,7 +241,7 @@ public class ElibomRestClientTest {
         Assert.assertEquals(schedule.getScheduledAt(), sdf.parse("2014-05-23 10:23:00"));
         Assert.assertEquals(schedule.getCreatedAt(), sdf.parse("2012-09-23 22:00:00"));
 
-        Assert.assertEquals(schedule.getStatus(), "scheduled");
+        Assert.assertEquals(schedule.getStatus(), "executed");
         Assert.assertTrue(schedule.isFile());
         Assert.assertEquals(schedule.getFileName(), "test.xls");
         Assert.assertFalse(schedule.isFileHasText());
@@ -413,6 +413,7 @@ public class ElibomRestClientTest {
         .put("user", new JSONObject().put("id", 45).put("url", "https://www.elibom.com/users/45"))
         .put("scheduledTime", "2014-05-23 10:23:00")
         .put("creationTime", "2012-09-23 22:00:00")
+        .put("status", "executed")
         .put("isFile", true)
         .put("fileName", "test.xls")
         .put("fileHasText", false)

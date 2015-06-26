@@ -14,11 +14,11 @@ Add the dependency to your projects pom.xml file:
 <dependency>
   <groupId>com.elibom</groupId>
   <artifactId>elibom-java</artifactId>
-  <version>0.2.2</version>
+  <version>0.2.3</version>
 </dependency>
 ```
 
-Or [download the JAR](http://central.maven.org/maven2/com/elibom/elibom-java/0.2.2/elibom-java-0.2.2.jar), [its dependencies](http://central.maven.org/maven2/org/json/json/20140107/json-20140107.jar) and include it in your project.
+Or [download the JAR](http://central.maven.org/maven2/com/elibom/elibom-java/0.2.3/elibom-java-0.2.3.jar), [its dependencies](http://central.maven.org/maven2/org/json/json/20140107/json-20140107.jar) and include it in your project.
 
 2\. Create an `ElibomRestClient` object passing your credentials:
 

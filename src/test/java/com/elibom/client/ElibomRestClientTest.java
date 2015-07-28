@@ -156,6 +156,7 @@ public class ElibomRestClientTest {
 
         Assert.assertNotNull(delivery);
         Assert.assertEquals(delivery.getId(), "12345");
+        Assert.assertEquals(delivery.getStatus(), "finished");
         Assert.assertEquals(delivery.getNumSent(), 1);
         Assert.assertEquals(delivery.getNumFailed(), 0);
         Assert.assertNotNull(delivery.getMessages());
@@ -400,6 +401,7 @@ public class ElibomRestClientTest {
         JSONArray jsonMessages = createFakeMessagesList();
         JSONObject jsonDelivery = new JSONObject()
         .put("deliveryId", "12345")
+        .put("status", "finished")
         .put("numSent", 1)
         .put("numFailed", 0)
         .put("messages", jsonMessages);

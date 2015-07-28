@@ -18,6 +18,8 @@ public class Delivery {
 
     private String id;
 
+    private String status;
+
     private int numSent;
 
     private int numFailed;
@@ -28,6 +30,7 @@ public class Delivery {
         this.json = json;
 
         this.id = json.getString("deliveryId");
+        this.status = json.getString("status");
         this.numSent = json.getInt("numSent");
         this.numFailed = json.getInt("numFailed");
 
@@ -40,6 +43,10 @@ public class Delivery {
 
     public String getId() {
         return id;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public int getNumSent() {

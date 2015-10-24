@@ -318,6 +318,33 @@ public class ElibomRestClient {
 
     
     
+    public boolean isAdminAccount() throws HttpServerException, RuntimeException {
+
+        try {
+            HttpURLConnection connection = get("/admin/accounts?hint="+this.username);
+            
+            
+            JSONArray json = getJsonArray(connection.getInputStream());
+            for (int i=0; i < json.length(); i++) {
+                
+                if(json.getJSONObject(i).has("id"))
+                {
+                    return true;
+                }
+            }
+            
+            
+            
+            return false;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } 
+    }
+    
+    
+    
     public JSONObject createUser( long idAccount, String name, String email,
             String password) throws HttpServerException, RuntimeException {
         

@@ -99,7 +99,7 @@ public class ElibomRestClientTest {
     }
 
     @Test
-    public void shouldScheduleMessage() throws Exception {
+   public void shouldScheduleMessage() throws Exception {
         stubFor(post(urlEqualTo("/messages"))
                 .willReturn(aResponse()
                     .withStatus(200)

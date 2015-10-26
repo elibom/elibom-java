@@ -351,18 +351,12 @@ public class ElibomRestClient {
 
         try {
             HttpURLConnection connection = get("/admin/accounts?hint="+this.username);
-            
-            
             JSONArray json = getJsonArray(connection.getInputStream());
-            for (int i=0; i < json.length(); i++) {
                 
-                if(json.getJSONObject(i).has("id"))
+                if(json.toString().length()>=2)
                 {
                     return true;
                 }
-            }
-            
-            
             
             return false;
         } catch (IOException e) {

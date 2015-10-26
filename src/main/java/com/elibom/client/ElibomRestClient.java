@@ -98,6 +98,35 @@ public class ElibomRestClient {
         }
     }
 
+    
+    /**
+     * Sends an SMS message to one or more destinations with the specified <code>text</code>.
+     *
+     * @param to the destinations (separated by comma) to which you want to send the SMS message.
+     * @param text the text of the SMS message, max 160 characters.
+     * @param campaing an id to identified a group of messages.
+     *
+     * @return a String that you can use to query the delivery (using the {@link #getDelivery(String)} method).
+     * @throws HttpServerException if the server responds with a HTTP status code other than <code>200 OK</code>.
+     * @throws RuntimeException wraps any other unexpected exception.
+     */
+    public String sendMessage(String to, String text, String campaign) throws HttpServerException, RuntimeException {
+        Preconditions.notEmpty(to, "no destinations provided");
+        Preconditions.notEmpty(text, "no text provided");
+        Preconditions.notEmpty(campaign, "no campaign provided");
+        Preconditions.maxLength(text, 160, "text has more than 160 characters");
+
+        try {
+            JSONObject json = new JSONObject().put("to", to).put("text", text).put("campaign", campaign);
+            HttpURLConnection connection = post("/messages", json);
+            return getJsonObject(connection.getInputStream()).getString("deliveryToken");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
     /**
      * Schedules an SMS message for the specified <code>scheduleDate</code> to one or more destinations and with the specified
      * <code>text</code>.

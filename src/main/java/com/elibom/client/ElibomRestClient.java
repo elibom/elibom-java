@@ -100,6 +100,34 @@ public class ElibomRestClient {
 
     
     /**
+     * Sends an SMS message to one or more destinations with the specified <code>text</code>.
+     *
+     * @param to the destinations (separated by comma) to which you want to send the SMS message.
+     * @param text the text of the SMS message, max 160 characters.
+     * @param campaing an id to identified a group of messages.
+     *
+     * @return a String that you can use to query the delivery (using the {@link #getDelivery(String)} method).
+     * @throws HttpServerException if the server responds with a HTTP status code other than <code>200 OK</code>.
+     * @throws RuntimeException wraps any other unexpected exception.
+     */
+    public String sendMessage(String to, String text, String campaign) throws HttpServerException, RuntimeException {
+        Preconditions.notEmpty(to, "no destinations provided");
+        Preconditions.notEmpty(text, "no text provided");
+        Preconditions.notEmpty(campaign, "no campaign provided");
+        Preconditions.maxLength(text, 160, "text has more than 160 characters");
+
+        try {
+            JSONObject json = new JSONObject().put("to", to).put("text", text).put("campaign", campaign);
+            HttpURLConnection connection = post("/messages", json);
+            return getJsonObject(connection.getInputStream()).getString("deliveryToken");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    /**
      * Schedules an SMS message for the specified <code>scheduleDate</code> to one or more destinations and with the specified
      * <code>text</code>.
      *
@@ -351,6 +379,54 @@ public class ElibomRestClient {
         }
     }
 
+    
+    
+    public boolean isAdminAccount() throws HttpServerException, RuntimeException {
+
+        try {
+            HttpURLConnection connection = get("/admin/accounts?hint="+this.username);
+            JSONArray json = getJsonArray(connection.getInputStream());
+                
+                if(json.toString().length()>=2)
+                {
+                    return true;
+                }
+            
+            return false;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } 
+    }
+    
+    
+    
+    public JSONObject createUser( long idAccount, String name, String email,
+            String password) throws HttpServerException, RuntimeException {
+        
+        Preconditions.notEmpty(name, "no name provided");
+        Preconditions.notEmpty(email, "no email provided");
+        Preconditions.notEmpty(password, "no password provided");
+
+        try {
+            JSONObject json = new JSONObject().
+                put("accountId", idAccount).
+                put("email", email).
+                put("password",password).
+                put("name",name).
+                put("countryCode",57).
+                put("timeZone","GMT-05:00" );
+            
+            HttpURLConnection connection = post("/admin/users", json);
+            return getJsonObject(connection.getInputStream());
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
     private HttpURLConnection post(String resource, JSONObject json) throws JSONException, IOException {
         URL url = buildUrl(resource);
 

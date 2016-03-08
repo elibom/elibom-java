@@ -115,7 +115,7 @@ public class ElibomRestClientTest {
         verify(postRequestedFor(urlEqualTo("/messages"))
                 .withHeader("Accept", equalTo("application/json"))
                 .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
-                .withRequestBody(equalTo("{\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\",\"scheduleDate\":\"2014-02-18 10:00\"}")));
+                .withRequestBody(equalTo("{\"scheduleDate\":\"2014-02-18 10:00\",\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\"}")));
     }
 
     @Test(expectedExceptions=IllegalArgumentException.class)

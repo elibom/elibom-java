@@ -115,7 +115,7 @@ public class ElibomRestClientTest {
         verify(postRequestedFor(urlEqualTo("/messages"))
                 .withHeader("Accept", equalTo("application/json"))
                 .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
-                .withRequestBody(equalTo("{\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\",\"scheduleDate\":\"2014-02-18 10:00\"}")));
+                .withRequestBody(equalTo("{\"scheduleDate\":\"2014-02-18 10:00\",\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\"}")));
     }
 
     @Test(expectedExceptions=IllegalArgumentException.class)
@@ -370,6 +370,48 @@ public class ElibomRestClientTest {
         ElibomRestClient elibom = new ElibomRestClient("t@u.com", "test", "http://localhost:4005");
         elibom.getLastMessages(-1);
     }
+
+    @Test
+    public void shouldShowLastMessagesBetweenDates() throws Exception {
+        JSONArray jsonMessages = createFakeMessagesList();
+
+        JSONObject jsonLastMessages = new JSONObject()
+        .put("messages", jsonMessages);
+        
+        stubFor(get(urlEqualTo("/messages?perPage=1&user=t@u.com&startDate=23-07-2013&endDate=24-07-2013"))
+                .willReturn(aResponse()
+                    .withStatus(200)
+                    .withHeader("Content-Type", "application/json; charset=UTF-8")
+                    .withBody(jsonLastMessages.toString())));
+
+        ElibomRestClient elibom = new ElibomRestClient("t@u.com", "test", "http://localhost:4005");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+        
+        List<Message>messages = elibom.getLastMessages(1,sdf1.parse("23-07-2013"),sdf1.parse("24-07-2013"));
+        Assert.assertNotNull(messages);
+
+        Message message = messages.get(0);
+        Assert.assertNotNull(message);
+        Assert.assertEquals(message.getId(), 171851);
+        Assert.assertEquals(message.getUserId(), 2);
+        Assert.assertEquals(message.getTo(), "573002175604");
+        Assert.assertEquals(message.getOperator(), "Tigo (Colombia)");
+        Assert.assertEquals(message.getText(), "this is a test");
+        Assert.assertEquals(message.getStatus(), "sent");
+        Assert.assertEquals(message.getStatusDetail(), "sent");
+        Assert.assertEquals(message.getCredits(), new BigDecimal("1"));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Assert.assertEquals(message.getCreatedAt(), sdf.parse("2013-07-24 15:05:34"));
+        Assert.assertEquals(message.getSentAt(), sdf.parse("2013-07-24 15:05:34"));
+    }
+    
+    @Test(expectedExceptions=IllegalArgumentException.class)
+    public void shoudlFailShowLastMessagesBetweenDatesWithNegativeNumMessages() throws Exception {
+        ElibomRestClient elibom = new ElibomRestClient("t@u.com", "test", "http://localhost:4005");
+        elibom.getLastMessages(-1);
+    }
+
+    
     
     private JSONObject createFakeMessage() throws Exception
     {

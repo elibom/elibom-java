@@ -4,7 +4,7 @@
     <groupId>com.elibom</groupId>
     <artifactId>elibom-java</artifactId>
     <packaging>jar</packaging>
-    <version>0.2.2-SNAPSHOT</version>
+    <version>0.2.5-SNAPSHOT</version>
     <name>Elibom REST API Client</name>
     <description>A java client for Elibom REST API</description>
     <url>http://www.elibom.com</url>

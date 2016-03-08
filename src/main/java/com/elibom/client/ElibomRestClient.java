@@ -189,40 +189,6 @@ public class ElibomRestClient {
     
     
     /**
-     * Query the last <code>numMessages</code> messages sent from an user between two dates
-     * 
-     * @param numMessages number of messages that will be consulted
-     * @param startDate the initial date from the report 
-     * @param endDate the end date from the report
-     * @return a List of Message objects or an empty List if no messages is found
-     * @throws HttpServerException if the server responds with a HTTP status code other than <code>200 OK</code>.
-     * @throws RuntimeException wraps any other unexpected exception.
-     */
-    public List<Message> getLastMessages(int numMessages, Date startDate, Date endDate) throws HttpServerException, RuntimeException {
-        Preconditions.isInteger(numMessages, "numMessages must be greater than zero");
-        Preconditions.notNull(startDate, "no startDate provided");
-        Preconditions.notNull(endDate, "no endDate provided");
-        
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            HttpURLConnection connection = get("/messages?perPage="+numMessages+"&user="+this.username+"&startDate="+sdf.format(startDate)+"&endDate="+sdf.format(endDate));
-            JSONObject json = getJsonObject(connection.getInputStream());List<Message> messages = new ArrayList<Message>();
-            JSONArray jm = json.getJSONArray("messages");
-            for (int i=0; i < jm.length(); i++) {
-                messages.add(new Message(jm.getJSONObject(i)));
-            }
-            
-            return messages;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
-    /**
      * Query the delivery with the specified <code>deliveryId</code>.
      *
      * @param deliveryId

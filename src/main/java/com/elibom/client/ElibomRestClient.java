@@ -100,7 +100,7 @@ public class ElibomRestClient {
 
     
     /**
-     * Sends an SMS message to one or more destinations with the specified <code>text</code>.
+     * Sends an SMS message to one or more destinations with the specified <code>text</code> and a campaign id.
      *
      * @param to the destinations (separated by comma) to which you want to send the SMS message.
      * @param text the text of the SMS message, max 160 characters.
@@ -157,6 +157,38 @@ public class ElibomRestClient {
         }
     }
 
+    /**
+     * Schedules an SMS message for the specified <code>scheduleDate</code> to one or more destinations and with the specified
+     * <code>text</code> and a campaign id.
+     *
+     * @param to the destinations (separated by comma) to which we are going to send the scheduled SMS message.
+     * @param text the text of the SMS message, max 160 characters.
+     * @param scheduleDate the date in which the message is going to be sent.
+     * @param campaing an id to identified a group of messages.
+     *
+     * @return the id of the scheduled message which you can query using the {@link #getSchedule(long)} method.
+     * @throws HttpServerException if the server responds with a HTTP status code other than <code>200 OK</code>.
+     * @throws RuntimeException wraps any other unexpected exception.
+     */
+    public long scheduleMessage(String to, String text, Date scheduleDate,String campaign) throws HttpServerException, RuntimeException {
+        Preconditions.notEmpty(to, "no destinations provided");
+        Preconditions.notEmpty(text, "no text provided");
+        Preconditions.maxLength(text, 160, "text has more than 160 characters");
+        Preconditions.notEmpty(campaign, "no campaign provided");
+        Preconditions.notNull(scheduleDate, "no scheduleDate provided");
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            JSONObject json = new JSONObject().put("to", to).put("text", text).put("scheduleDate", sdf.format(scheduleDate)).put("campaign", campaign);
+            HttpURLConnection connection = post("/messages", json);
+            return getJsonObject(connection.getInputStream()).getLong("scheduleId");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }    
+    
     /**
      * Query the last <code>numMessages</code> messages sent from an user
      * 
@@ -379,54 +411,6 @@ public class ElibomRestClient {
         }
     }
 
-    
-    
-    public boolean isAdminAccount() throws HttpServerException, RuntimeException {
-
-        try {
-            HttpURLConnection connection = get("/admin/accounts?hint="+this.username);
-            JSONArray json = getJsonArray(connection.getInputStream());
-                
-                if(json.toString().length()>=2)
-                {
-                    return true;
-                }
-            
-            return false;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        } 
-    }
-    
-    
-    
-    public JSONObject createUser( long idAccount, String name, String email,
-            String password) throws HttpServerException, RuntimeException {
-        
-        Preconditions.notEmpty(name, "no name provided");
-        Preconditions.notEmpty(email, "no email provided");
-        Preconditions.notEmpty(password, "no password provided");
-
-        try {
-            JSONObject json = new JSONObject().
-                put("accountId", idAccount).
-                put("email", email).
-                put("password",password).
-                put("name",name).
-                put("countryCode",57).
-                put("timeZone","GMT-05:00" );
-            
-            HttpURLConnection connection = post("/admin/users", json);
-            return getJsonObject(connection.getInputStream());
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
     private HttpURLConnection post(String resource, JSONObject json) throws JSONException, IOException {
         URL url = buildUrl(resource);
 

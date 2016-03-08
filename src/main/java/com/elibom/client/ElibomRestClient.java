@@ -31,7 +31,7 @@ public class ElibomRestClient {
 
     private static final String DEFAULT_HOST = "https://www.elibom.com";
     
-    private final String LIB_VERSION = "java-0.2.1";
+    private final String LIB_VERSION = "java-0.2.4";
 
     private String host;
 

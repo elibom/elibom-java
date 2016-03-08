@@ -45,6 +45,9 @@ public class Schedule {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         this.scheduledAt = sdf.parse(json.getString("scheduledTime"));
         this.createdAt = sdf.parse(json.getString("creationTime"));
+        if (json.has("status")){
+            this.status = json.getString("status");
+        }
 
         this.isFile = json.getBoolean("isFile");
         if (isFile) {

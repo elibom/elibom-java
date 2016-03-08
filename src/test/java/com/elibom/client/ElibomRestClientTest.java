@@ -71,26 +71,6 @@ public class ElibomRestClientTest {
                 .withRequestBody(equalTo("{\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\"}")));
     }
 
-
-    @Test
-    public void shouldSendMessageWithCampingId() throws Exception {
-        stubFor(post(urlEqualTo("/messages"))
-                .willReturn(aResponse()
-                    .withStatus(200)
-                    .withHeader("Content-Type", "application/json; charset=UTF-8")
-                    .withBody("{ \"deliveryToken\": \"12345\" }")));
-
-        ElibomRestClient elibom = new ElibomRestClient("t@u.com", "test", "http://localhost:4005");
-        String deliveryToken = elibom.sendMessage("573002111111,583242111111", "this is a test","Campaing_1");
-        Assert.assertEquals(deliveryToken, "12345");
-
-        verify(postRequestedFor(urlEqualTo("/messages"))
-                .withHeader("Accept", equalTo("application/json"))
-                .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
-                .withRequestBody(equalTo("{\"campaign\":\"Campaing_1\",\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\"}")));
-    }
-
-    
     @Test(expectedExceptions=IllegalArgumentException.class)
     public void shouldFailSendMessageWithLongText() throws Exception {
         ElibomRestClient elibom = new ElibomRestClient("t@u.com", "test", "http://localhost:4005");
@@ -119,7 +99,7 @@ public class ElibomRestClientTest {
     }
 
     @Test
-   public void shouldScheduleMessage() throws Exception {
+    public void shouldScheduleMessage() throws Exception {
         stubFor(post(urlEqualTo("/messages"))
                 .willReturn(aResponse()
                     .withStatus(200)
@@ -135,7 +115,7 @@ public class ElibomRestClientTest {
         verify(postRequestedFor(urlEqualTo("/messages"))
                 .withHeader("Accept", equalTo("application/json"))
                 .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
-                .withRequestBody(equalTo("{\"scheduleDate\":\"2014-02-18 10:00\",\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\"}")));
+                .withRequestBody(equalTo("{\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\",\"scheduleDate\":\"2014-02-18 10:00\"}")));
     }
 
     @Test(expectedExceptions=IllegalArgumentException.class)
@@ -176,6 +156,7 @@ public class ElibomRestClientTest {
 
         Assert.assertNotNull(delivery);
         Assert.assertEquals(delivery.getId(), "12345");
+        Assert.assertEquals(delivery.getStatus(), "finished");
         Assert.assertEquals(delivery.getNumSent(), 1);
         Assert.assertEquals(delivery.getNumFailed(), 0);
         Assert.assertNotNull(delivery.getMessages());
@@ -239,7 +220,7 @@ public class ElibomRestClientTest {
         Assert.assertFalse(schedule.isFileHasText());
         Assert.assertEquals(schedule.getText(), "this is a test");
     }
-/*
+
     @Test
     public void shouldShowScheduledMessage() throws Exception {
         JSONObject jsonSchedule = createFakeScheduler();
@@ -261,13 +242,13 @@ public class ElibomRestClientTest {
         Assert.assertEquals(schedule.getScheduledAt(), sdf.parse("2014-05-23 10:23:00"));
         Assert.assertEquals(schedule.getCreatedAt(), sdf.parse("2012-09-23 22:00:00"));
 
-        Assert.assertEquals(schedule.getStatus(), "scheduled");
+        Assert.assertEquals(schedule.getStatus(), "executed");
         Assert.assertTrue(schedule.isFile());
         Assert.assertEquals(schedule.getFileName(), "test.xls");
         Assert.assertFalse(schedule.isFileHasText());
         Assert.assertEquals(schedule.getText(), "this is a test");
     }
-*/
+
     @Test
     public void shouldCancelSchedule() throws Exception {
         stubFor(delete(urlEqualTo("/schedules/32"))
@@ -462,6 +443,7 @@ public class ElibomRestClientTest {
         JSONArray jsonMessages = createFakeMessagesList();
         JSONObject jsonDelivery = new JSONObject()
         .put("deliveryId", "12345")
+        .put("status", "finished")
         .put("numSent", 1)
         .put("numFailed", 0)
         .put("messages", jsonMessages);
@@ -475,6 +457,7 @@ public class ElibomRestClientTest {
         .put("user", new JSONObject().put("id", 45).put("url", "https://www.elibom.com/users/45"))
         .put("scheduledTime", "2014-05-23 10:23:00")
         .put("creationTime", "2012-09-23 22:00:00")
+        .put("status", "executed")
         .put("isFile", true)
         .put("fileName", "test.xls")
         .put("fileHasText", false)

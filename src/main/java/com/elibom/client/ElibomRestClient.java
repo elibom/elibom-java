@@ -30,8 +30,8 @@ import sun.misc.BASE64Encoder;
 public class ElibomRestClient {
 
     private static final String DEFAULT_HOST = "https://www.elibom.com";
-    
-    private final String LIB_VERSION = "java-0.2.4";
+
+    private final String LIB_VERSION = "java-0.2.5";
 
     private String host;
 

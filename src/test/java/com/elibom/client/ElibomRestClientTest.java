@@ -87,7 +87,7 @@ public class ElibomRestClientTest {
         verify(postRequestedFor(urlEqualTo("/messages"))
                 .withHeader("Accept", equalTo("application/json"))
                 .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
-                .withRequestBody(equalTo("{\"campaign\":\"Campaing_1\",\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\"}")));
+                .withRequestBody(equalTo("{\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\",\"campaign\":\"Campaing_1\"}")));
     }
 
     
@@ -135,7 +135,7 @@ public class ElibomRestClientTest {
         verify(postRequestedFor(urlEqualTo("/messages"))
                 .withHeader("Accept", equalTo("application/json"))
                 .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
-                .withRequestBody(equalTo("{\"scheduleDate\":\"2014-02-18 10:00\",\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\"}")));
+                .withRequestBody(equalTo("{\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\",\"scheduleDate\":\"2014-02-18 10:00\"}")));
     }
     
     @Test
@@ -155,7 +155,7 @@ public class ElibomRestClientTest {
         verify(postRequestedFor(urlEqualTo("/messages"))
                 .withHeader("Accept", equalTo("application/json"))
                 .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
-                .withRequestBody(equalTo("{\"scheduleDate\":\"2014-02-18 10:00\",\"campaign\":\"myCampaign\",\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\"}")));
+                .withRequestBody(equalTo("{\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\",\"scheduleDate\":\"2014-02-18 10:00\",\"campaign\":\"myCampaign\"}")));
     }
 
     @Test(expectedExceptions=IllegalArgumentException.class)

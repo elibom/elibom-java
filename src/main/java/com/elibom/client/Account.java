@@ -23,7 +23,7 @@ public class Account {
         this.json = json;
         this.name = json.getString("name");
         if (json.has("credits")) {
-            this.credits = new BigDecimal(json.getString("credits"));
+            this.credits = json.getBigDecimal("credits");
         }
         this.ownerId = json.getJSONObject("owner").getLong("id");
     }

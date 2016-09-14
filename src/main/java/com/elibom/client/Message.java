@@ -51,7 +51,7 @@ public class Message {
         this.text = json.getString("text");
         this.status = json.getString("status");
         this.statusDetail = json.getString("statusDetail");
-        this.credits = new BigDecimal(json.getString("credits"));
+        this.credits = json.getBigDecimal("credits");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         this.createdAt = sdf.parse(json.getString("createdAt"));

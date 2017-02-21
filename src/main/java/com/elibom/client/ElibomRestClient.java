@@ -14,24 +14,23 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.xml.bind.DatatypeConverter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import sun.misc.BASE64Encoder;
 
 /**
  * The <a href="http://www.elibom.com/">elibom.com</a> REST API client.
  *
  * @author Germán Escobar
  */
-@SuppressWarnings("restriction")
 public class ElibomRestClient {
 
     private static final String DEFAULT_HOST = "https://www.elibom.com";
 
-    private final String LIB_VERSION = "java-0.2.5";
+    private final String LIB_VERSION = "java-0.2.6";
 
     private String host;
 
@@ -104,7 +103,7 @@ public class ElibomRestClient {
      *
      * @param to the destinations (separated by comma) to which you want to send the SMS message.
      * @param text the text of the SMS message, max 160 characters.
-     * @param campaing an id to identified a group of messages.
+     * @param campaign a tag used to identify a group of messages.
      *
      * @return a String that you can use to query the delivery (using the {@link #getDelivery(String)} method).
      * @throws HttpServerException if the server responds with a HTTP status code other than <code>200 OK</code>.
@@ -164,7 +163,7 @@ public class ElibomRestClient {
      * @param to the destinations (separated by comma) to which we are going to send the scheduled SMS message.
      * @param text the text of the SMS message, max 160 characters.
      * @param scheduleDate the date in which the message is going to be sent.
-     * @param campaing an id to identified a group of messages.
+     * @param campaign an tag used to identify a group of messages.
      *
      * @return the id of the scheduled message which you can query using the {@link #getSchedule(long)} method.
      * @throws HttpServerException if the server responds with a HTTP status code other than <code>200 OK</code>.
@@ -498,7 +497,7 @@ public class ElibomRestClient {
 
     private String buildAuthorizationHeader() {
         String credentials = username + ":" + apiPassword;
-        return "Basic " + new BASE64Encoder().encode(credentials.getBytes());
+        return "Basic " + DatatypeConverter.printBase64Binary(credentials.getBytes());
     }
 
     private JSONObject getJsonObject(InputStream stream) throws JSONException, IOException {

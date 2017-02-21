@@ -87,7 +87,7 @@ public class ElibomRestClientTest {
         verify(postRequestedFor(urlEqualTo("/messages"))
                 .withHeader("Accept", equalTo("application/json"))
                 .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
-                .withRequestBody(equalTo("{\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\",\"campaign\":\"Campaing_1\"}")));
+                .withRequestBody(equalTo("{\"campaign\":\"Campaing_1\",\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\"}")));
     }
 
     
@@ -119,6 +119,26 @@ public class ElibomRestClientTest {
     }
 
     @Test
+    public void shouldScheduleMessageWithCampingId() throws Exception {
+        stubFor(post(urlEqualTo("/messages"))
+                .willReturn(aResponse()
+                    .withStatus(200)
+                    .withHeader("Content-Type", "application/json; charset=UTF-8")
+                    .withBody("{ \"scheduleId\": \"32\" }")));
+
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2014-02-18 10:00");
+
+        ElibomRestClient elibom = new ElibomRestClient("t@u.com", "test", "http://localhost:4005");
+        long scheduleId = elibom.scheduleMessage("573002111111,583242111111", "this is a test", date, "Campaing_1");
+        Assert.assertEquals(scheduleId, 32);
+
+        verify(postRequestedFor(urlEqualTo("/messages"))
+                .withHeader("Accept", equalTo("application/json"))
+                .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
+                .withRequestBody(equalTo("{\"scheduleDate\":\"2014-02-18 10:00\",\"campaign\":\"Campaing_1\",\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\"}")));
+    }
+
+    @Test
     public void shouldScheduleMessage() throws Exception {
         stubFor(post(urlEqualTo("/messages"))
                 .willReturn(aResponse()
@@ -135,27 +155,7 @@ public class ElibomRestClientTest {
         verify(postRequestedFor(urlEqualTo("/messages"))
                 .withHeader("Accept", equalTo("application/json"))
                 .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
-                .withRequestBody(equalTo("{\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\",\"scheduleDate\":\"2014-02-18 10:00\"}")));
-    }
-    
-    @Test
-    public void shouldScheduleMessageWithCampingId() throws Exception {
-        stubFor(post(urlEqualTo("/messages"))
-                .willReturn(aResponse()
-                    .withStatus(200)
-                    .withHeader("Content-Type", "application/json; charset=UTF-8")
-                    .withBody("{ \"scheduleId\": \"32\" }")));
-
-        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2014-02-18 10:00");
-
-        ElibomRestClient elibom = new ElibomRestClient("t@u.com", "test", "http://localhost:4005");
-        long scheduleId = elibom.scheduleMessage("573002111111,583242111111", "this is a test", date,"myCampaign");
-        Assert.assertEquals(scheduleId, 32);
-
-        verify(postRequestedFor(urlEqualTo("/messages"))
-                .withHeader("Accept", equalTo("application/json"))
-                .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
-                .withRequestBody(equalTo("{\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\",\"scheduleDate\":\"2014-02-18 10:00\",\"campaign\":\"myCampaign\"}")));
+                .withRequestBody(equalTo("{\"scheduleDate\":\"2014-02-18 10:00\",\"to\":\"573002111111,583242111111\",\"text\":\"this is a test\"}")));
     }
 
     @Test(expectedExceptions=IllegalArgumentException.class)
@@ -380,7 +380,7 @@ public class ElibomRestClientTest {
         JSONObject jsonLastMessages = new JSONObject()
         .put("messages", jsonMessages);
         
-        stubFor(get(urlEqualTo("/messages?perPage=1&user=t@u.com"))
+        stubFor(get(urlEqualTo("/messages?status=sent&perPage=1&user=t@u.com"))
                 .willReturn(aResponse()
                     .withStatus(200)
                     .withHeader("Content-Type", "application/json; charset=UTF-8")
@@ -418,7 +418,7 @@ public class ElibomRestClientTest {
         JSONObject jsonLastMessages = new JSONObject()
         .put("messages", jsonMessages);
         
-        stubFor(get(urlEqualTo("/messages?perPage=1&user=t@u.com&startDate=23-07-2013&endDate=24-07-2013"))
+        stubFor(get(urlEqualTo("/messages?status=sent&perPage=1&user=t@u.com&startDate=23-07-2013&endDate=24-07-2013"))
                 .willReturn(aResponse()
                     .withStatus(200)
                     .withHeader("Content-Type", "application/json; charset=UTF-8")

@@ -202,7 +202,7 @@ public class ElibomRestClient {
     	Preconditions.isInteger(numMessages, "numMessages must be greater than zero");
     	
     	try {
-    		HttpURLConnection connection = get("/messages?perPage="+numMessages+"&user="+this.username);
+    		HttpURLConnection connection = get("/messages?status=sent&perPage="+numMessages+"&user="+this.username);
     		JSONObject json = getJsonObject(connection.getInputStream());List<Message> messages = new ArrayList<Message>();
     		JSONArray jm = json.getJSONArray("messages");
     		for (int i=0; i < jm.length(); i++) {
@@ -237,7 +237,7 @@ public class ElibomRestClient {
         
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            HttpURLConnection connection = get("/messages?perPage="+numMessages+"&user="+this.username+"&startDate="+sdf.format(startDate)+"&endDate="+sdf.format(endDate));
+            HttpURLConnection connection = get("/messages?status=sent&perPage="+numMessages+"&user="+this.username+"&startDate="+sdf.format(startDate)+"&endDate="+sdf.format(endDate));
             JSONObject json = getJsonObject(connection.getInputStream());List<Message> messages = new ArrayList<Message>();
             JSONArray jm = json.getJSONArray("messages");
             for (int i=0; i < jm.length(); i++) {
